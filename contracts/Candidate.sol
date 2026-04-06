@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: GPL-3.0
 
-pragma solidity 0.8.28;
+pragma solidity ^0.8.28;
 
 contract Candidate {
     
@@ -12,7 +12,7 @@ contract Candidate {
         bool exists;
     }
     
-    address public owner;
+    address public owner12;
     uint256 public productCount;
     uint256 public totalRevenue;
     mapping(uint256 => Product) public products;

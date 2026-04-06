@@ -12,7 +12,7 @@ contract Candidate {
         bool exists;
     }
     
-    address public owner12;
+    address public owner;
     uint256 public productCount;
     uint256 public totalRevenue;
     mapping(uint256 => Product) public products;

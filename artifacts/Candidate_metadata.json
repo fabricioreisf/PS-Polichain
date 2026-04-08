@@ -354,11 +354,11 @@
 	},
 	"sources": {
 		"contracts/Candidate.sol": {
-			"keccak256": "0x69d695a88b1a33cca299beb675b0e2cb2d5c4a8ec913feec894a540de736c51c",
+			"keccak256": "0x7cf3a69f8f0688a88454ce0ee2da14852bb5ff1f8d1f894963296dea8f6fc021",
 			"license": "GPL-3.0",
 			"urls": [
-				"bzz-raw://963eba866671d719c4670cc56e3f3b7cf3754b1708133db898baf1e951d96c5e",
-				"dweb:/ipfs/QmSCUBWjbV8PCFMQq8WX1zVg7jwzis5oP7oiLoUbAydEwX"
+				"bzz-raw://d094e48f22c78476b460ae91a74c3882d9bc0b9efb74a5d8a3ec241d947f1e2d",
+				"dweb:/ipfs/QmQ3jpA5rKR8MY8QPLoNMuDFhCfzRpJ9Z3K2PQh8GmTmz4"
 			]
 		}
 	},

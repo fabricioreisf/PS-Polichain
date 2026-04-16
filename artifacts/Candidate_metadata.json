@@ -1,6 +1,6 @@
 {
 	"compiler": {
-		"version": "0.8.28+commit.7893614a"
+		"version": "0.8.34+commit.80d5c536"
 	},
 	"language": "Solidity",
 	"output": {
@@ -341,7 +341,7 @@
 		"compilationTarget": {
 			"contracts/Candidate.sol": "Candidate"
 		},
-		"evmVersion": "cancun",
+		"evmVersion": "osaka",
 		"libraries": {},
 		"metadata": {
 			"bytecodeHash": "ipfs"
@@ -354,11 +354,11 @@
 	},
 	"sources": {
 		"contracts/Candidate.sol": {
-			"keccak256": "0x7cf3a69f8f0688a88454ce0ee2da14852bb5ff1f8d1f894963296dea8f6fc021",
+			"keccak256": "0x53bca0aff19bc3db7cd9f47835025d7a40912645816caa7015f3ec89b9f54d5f",
 			"license": "GPL-3.0",
 			"urls": [
-				"bzz-raw://d094e48f22c78476b460ae91a74c3882d9bc0b9efb74a5d8a3ec241d947f1e2d",
-				"dweb:/ipfs/QmQ3jpA5rKR8MY8QPLoNMuDFhCfzRpJ9Z3K2PQh8GmTmz4"
+				"bzz-raw://dee703d3ca129409aea4a2bb39c722edb560bf1e6022335842497d3c2e770e57",
+				"dweb:/ipfs/QmfXaKMQAqP2P43ZrBDErUA45p95eqnhGp4UQKd8kPs4bR"
 			]
 		}
 	},

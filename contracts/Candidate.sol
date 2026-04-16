@@ -11,6 +11,17 @@ contract Candidate {
         uint256 quantity;
         bool exists;
     }
+
+    // Custom errors
+    error NaoEOwner();
+    error ProdutoNaoExiste(uint256 id);
+    error NomeVazio();
+    error ValorZero();
+    error QuantidadeZero();
+    error EstoqueInsuficiente(uint256 disponivel, uint256 pedido);
+    error ValorIncorreto(uint256 enviado, uint256 esperado);
+    error SaldoZero();
+    error SaqueFalhou();
     
     address public owner;
     uint256 public productCount;
@@ -29,58 +40,61 @@ contract Candidate {
 
     // Product management
     function registrarProduto(string memory _nome, uint256 _preco, uint256 _quantidade) public onlyOwner returns (uint256) {
-        require(bytes(_nome).length > 0, "Product name shall not be empty");
-        require(_preco > 0, "Price must be greater than 0");
-        require(_quantidade > 0, "Quantity must be greater than 0");
+        if (bytes(_nome).length == 0) revert NomeVazio();
+        if (_preco == 0)              revert ValorZero();
+        if (_quantidade == 0)         revert QuantidadeZero();
 
-        productCount++;
+        ++productCount;
         products[productCount] = Product(productCount, _nome, _preco, _quantidade, true);
         return productCount;
     }
 
     function alterarPreco(uint256 _produtoId, uint256 _novoPreco) public onlyOwner {
-        require(products[_produtoId].exists, "Product does not exist");
-        require(_novoPreco > 0, "Price must be greater than 0");
-        products[_produtoId].price = _novoPreco;
+        Product storage p = products[_produtoId];
+        if (!p.exists)    revert ProdutoNaoExiste(_produtoId);
+        if (_novoPreco == 0) revert ValorZero();
+        p.price = _novoPreco;
     }
 
     function obterProduto(uint256 _produtoId) public view returns (Product memory) {
-        require(products[_produtoId].exists, "Product does not exist");
+        if (!products[_produtoId].exists) revert ProdutoNaoExiste(_produtoId);
         return products[_produtoId];
     }
-
     // Stock management
     function verificarEstoque(uint256 _produtoId) public view returns (uint256) {
-        require(products[_produtoId].exists, "Product does not exist");
+        if (!products[_produtoId].exists) revert ProdutoNaoExiste(_produtoId);
         return products[_produtoId].quantity;
     }
     
     function adicionarEstoque(uint256 _produtoId, uint256 _quantidade) public onlyOwner {
-        require(products[_produtoId].exists, "Product does not exist");
-        require(_quantidade > 0, "Quantity must be greater than 0");
-        products[_produtoId].quantity += _quantidade;
+        Product storage p = products[_produtoId];
+        if (!p.exists)      revert ProdutoNaoExiste(_produtoId);
+        if (_quantidade == 0) revert QuantidadeZero();
+        p.quantity += _quantidade;
     }
 
+
     function removerDoEstoque(uint256 _produtoId, uint256 _quantidade) public onlyOwner {
-        require(products[_produtoId].exists, "Product does not exist");
-        require(_quantidade > 0, "Number of products to be removed must be greater than 0");
-        require(products[_produtoId].quantity >= _quantidade, "Not enough stock to remove");
-        products[_produtoId].quantity -= _quantidade;
+        Product storage p = products[_produtoId];
+        if (!p.exists)                revert ProdutoNaoExiste(_produtoId);
+        if (_quantidade == 0)         revert QuantidadeZero();
+        if (p.quantity < _quantidade) revert EstoqueInsuficiente(p.quantity, _quantidade);
+        p.quantity -= _quantidade;
     }
 
     // Sales
     function comprar(uint256 _produtoId, uint256 _quantidade) public payable {
-        require(products[_produtoId].exists, "Product does not exist");
-        require(_quantidade > 0, "Quantity must be greater than 0");
-        require(products[_produtoId].quantity >= _quantidade, "Not enough stock");
-        
-        uint256 _totalPrice = products[_produtoId].price * _quantidade;
+        Product storage p = products[_produtoId];
+        if (!p.exists)                revert ProdutoNaoExiste(_produtoId);
+        if (_quantidade == 0)         revert QuantidadeZero();
+        if (p.quantity < _quantidade) revert EstoqueInsuficiente(p.quantity, _quantidade);
 
-        require(msg.value == _totalPrice, "Value sent must be exactly the purchase total price");
+        uint256 total = p.price * _quantidade;
+        if (msg.value != total) revert ValorIncorreto(msg.value, total);
 
-        products[_produtoId].quantity -= _quantidade;
-        totalRevenue += _totalPrice;
-        purchases[msg.sender] += _totalPrice;
+        p.quantity -= _quantidade;
+        totalRevenue += total;
+        purchases[msg.sender] += total;
     }
 
     // Reports
@@ -98,7 +112,9 @@ contract Candidate {
 
     // Withdrawals
     function sacar() public onlyOwner {
-        require(address(this).balance > 0, "Current contract balance is zero");
-        payable(owner).transfer(address(this).balance);
+        uint256 saldo = address(this).balance;
+        if (saldo == 0) revert SaldoZero();
+        (bool sucesso, ) = payable(owner).call{value: saldo}("");
+        if (!sucesso) revert SaqueFalhou();
     }
 }

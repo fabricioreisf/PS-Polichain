@@ -87,7 +87,6 @@ struct Product {
 - Preço e quantidade iniciais devem ser maiores que zero.
 - Não é possível operar sobre produtos inexistentes.
 - O valor enviado na compra deve ser **exatamente** `preco * quantidade`.
-- Não é permitido sacar quando o saldo do contrato for zero.
 
 ---
 
@@ -103,9 +102,9 @@ struct Product {
 ## Como Usar no Remix IDE
 
 1. Acesse [remix.ethereum.org](https://remix.ethereum.org)
-2. Crie um arquivo chamado exatamente `Candidate.sol` no workspace
+2. Crie um arquivo chamado `Candidate.sol` no workspace
 3. Cole o código do contrato
-4. Na aba **Solidity Compiler**, selecione a versão `0.8.28` e compile
+4. Na aba **Solidity Compiler**, selecione a versão `0.8.28` ou acima, e compile
 5. Na aba **Deploy & Run Transactions**, selecione o ambiente desejado (ex: Remix VM) e clique em **Deploy**
 6. Interaja com o contrato pelo painel de funções gerado automaticamente
 
